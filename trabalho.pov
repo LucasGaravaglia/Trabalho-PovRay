@@ -1,14 +1,15 @@
 #include "colors.inc"
 #include "textures.inc"
 #include "shapes.inc"
+#include "metals.inc"
 // //Atividade2
 camera{
-    location <50, 15, 0>
-    look_at <20, 15, 0>
+    location <-150, 300, 150>
+    look_at <0, 80, 80>
 }
-light_source{ <100, 100, 100> White }
-light_source{ <-100, 100, -100> White }
-plane{ y, -15
+light_source{ <-150, 300, 150> White }
+// light_source{ <-100, 100, -100> White }
+plane{ y, -50
     pigment{ White }
 }
 plane{<0,1,0>,1 hollow
@@ -28,24 +29,12 @@ plane{<0,1,0>,1 hollow
   scale 10000
 }// end of plane
 
-// X
-box { 
-    <0, 0, 0>, 
-    <1000, 1, 1>
-    pigment{Blue}
-}
-// Y
-box { 
-    <0, 0, 0>, 
-    <1, 1000, 1>
-    pigment{Red}
-}
-// Z
-box { 
-    <0, 0, 0>, 
-    <1, 1, 1000>
-    pigment{Green}
-}
+
+// box { <0, 0, 0>,  <1000, 1, 1> pigment{Blue} }// X
+// box { <0, 0, 0>,  <1, 1000, 1> pigment{Red}  }// Y
+// box { <0, 0, 0>,  <1, 1, 1000> pigment{Green}}// Z
+
+#declare Green_Metal = texture {pigment{color rgb <0, 1, 0>} finish { ambient 0.35 brilliance 2 diffuse 0.3 metallic specular 0.80 roughness 1/20 reflection 0.1}}
 
 #declare pneu = union{
   // Borracha do pneu
@@ -146,16 +135,85 @@ box {
   object{ parafuso_pneu translate <23.5, 18, 2> }
 }
 
+#declare apoio_motores = union {
+  difference {
+    box {<0, 0, 0>, <10, 5, 30> pigment{Gray}}
+    box {<1, 1, -10>, <9, 4, 40> texture{Metal}}
+  }
+  difference {
+    box {<0, 0, 35>,<10, 5, 90> pigment{Gray} }
+    box {<1, 1, 20>,<9, 4, 100> texture{Metal} }
+    rotate <-30, 0, 0> translate <0, -17, 0>
+  }
+}
 
+#declare eixo_apoio_motor = union {
+  box {<-1, 3, 1.5>,<3, 4, 6> pigment{Green} }
+  box {<-1, 3, -1.5>,<3, 4, -6> pigment{Green} }
 
+  box {<0, 0, 3>,<3, 3, 4> texture{Green_Metal} }
+  box {<0, 0, -3>,<3, 3, -4> texture{Green_Metal} }
+  difference{
+    difference{
+      cylinder {<1, 0, 0>, <2, 0, 0>, 3 texture{Green_Metal}}
+      cylinder {<0, 0, 0>, <3, 0, 0>, 2.5}
+    }
+    box {<-2, -1.5, -3>,<5, 1.5, 5> pigment{Black} }
+  }
+  
+  difference{
+    cylinder {<0, 0, 0>, <2, 0, 0>, 4 texture{Green_Metal}}
+    cylinder {<-1, 0, 0>, <3, 0, 0>, 3}
+  }
+  difference{
+    cylinder {<0, 0, 0>, <2, 0, 0>, 2.5 texture{Silver_Metal}}
+    cylinder {<-1, 0, 0>, <3, 0, 0>, 2.3}
+  }
+  difference{
+    cylinder {<0, 0, 0>, <2, 0, 0>, 1.5 texture{Silver_Metal}}
+    cylinder {<-1, 0, 0>, <3, 0, 0>, 1}
+  }
+  difference{
+    cylinder {<0, 0, 0>, <2, 0, 0>, 2.3 pigment{Black}}
+    cylinder {<-1, 0, 0>, <3, 0, 0>, 1.5}
+  }
+  cylinder {<-2, 0, 0>, <3, 0, 0>, 1 texture{Metal}}
+}
 
+#declare eixo_apoio_motor_parafuso = union{
+  object{ eixo_apoio_motor translate <0, 0, 0> }
+  cylinder {<1, 2, 5>, <1, 3, 5>, 0.8}
+  cylinder {<1, 2, -5>, <1, 3, -5>, 0.8}
+}
+
+#declare apoio_motor_completo = union {
+  difference{
+    object{ apoio_motores translate <-10, 0, -80> rotate <0,180,0>}
+    object{ eixo_apoio_motor_parafuso translate <-3, 30, 0> }
+  }
+  difference{
+    object{ apoio_motores translate <0, 0, -75> }
+    object{ eixo_apoio_motor_parafuso translate <-3, 30, 0> }
+  }
+  object{ eixo_apoio_motor_parafuso translate <-4, 30, 0> }
+  object{ eixo_apoio_motor_parafuso translate <11, 30, 0> }
+  
+}
+
+#declare motor_dupla = union {
+  object{ apoio_motor_completo translate <0, 60, 70> }
+  object{ roda_suporte translate <0, 0, 0> }
+  object{ roda_suporte translate <0, 0, 145> }
+
+}
 // object{ suporte translate <-3, 10, -25> rotate <0, -90, 0> }
 
+object{ motor_dupla translate <0, 0, 0> }
+object{ motor_dupla translate <-200, 0, 0> scale<-1,1,1>}
 
-object{ roda_suporte translate <0, 0, 0> }
-// object{ parafuso_pneu translate <0, 0, 0> }
+// object{ apoio_motores translate <0, 0, 0> }
 
-// object{ pneu translate <0, 0, 0> }
-// object{ pneu translate <-200, 0, 0>  scale<-1,1,1>}
-// object{ pneu translate <0, 0, 100> }
-// object{ pneu translate <-200, 0, 100>  scale<-1,1,1>}
+// object{ roda_suporte translate <0, 0, 0> }
+// object{ roda_suporte translate <-200, 0, 0>  scale<-1,1,1>}
+// object{ roda_suporte translate <0, 0, 100> }
+// object{ roda_suporte translate <-200, 0, 100>  scale<-1,1,1>}
