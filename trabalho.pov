@@ -2,11 +2,23 @@
 #include "textures.inc"
 #include "shapes.inc"
 #include "metals.inc"
-// //Atividade2
+// //Camera lado cima
 camera{
-    location <-150, 300, 150>
-    look_at <0, 80, 80>
+    location <-60, 140, -60>
+    look_at <0, 100, 0>
 }
+
+// camera{
+//     location <0, 90, -40>
+//     look_at <0, 90, 0>
+// }
+
+// camera{
+//     location <200, 170, 0>
+//     look_at <200, 100, 0>
+// }
+
+
 light_source{ <-150, 300, 150> White }
 // light_source{ <-100, 100, -100> White }
 plane{ y, -50
@@ -30,9 +42,9 @@ plane{<0,1,0>,1 hollow
 }// end of plane
 
 
-// box { <0, 0, 0>,  <1000, 1, 1> pigment{Blue} }// X
-// box { <0, 0, 0>,  <1, 1000, 1> pigment{Red}  }// Y
-// box { <0, 0, 0>,  <1, 1, 1000> pigment{Green}}// Z
+box { <0, 0, 0>,  <1000, 1, 1> pigment{Red} }// X
+// box { <0, 0, 0>,  <1, 1000, 1> pigment{Green}  }// Y
+box { <0, 0, 0>,  <1, 1, 1000> pigment{Blue}}// Z
 
 #declare Green_Metal = texture {pigment{color rgb <0, 1, 0>} finish { ambient 0.35 brilliance 2 diffuse 0.3 metallic specular 0.80 roughness 1/20 reflection 0.1}}
 
@@ -206,14 +218,96 @@ plane{<0,1,0>,1 hollow
   object{ roda_suporte translate <0, 0, 145> }
 
 }
-// object{ suporte translate <-3, 10, -25> rotate <0, -90, 0> }
 
-object{ motor_dupla translate <0, 0, 0> }
-object{ motor_dupla translate <-200, 0, 0> scale<-1,1,1>}
+#declare diff_barra_aluminio_menor = union{
+  box {<2, 4, -6>, <3, 6, 166> }
+  box {<1.4, 3.8, -6>, <3.6, 4.2, 166>}
+}
 
-// object{ apoio_motores translate <0, 0, 0> }
+#declare barra_aluminio_menor = union {
+  difference{
+    difference{
+      difference{
+        difference{
+          difference {
+            box {<0, 0, 0>, <5, 5, 130> texture{Chrome_Metal}}
+            box {<1.5, 1.5, -6>, <3.5, 3.5, 160> }
+          }
+          object{ diff_barra_aluminio_menor translate <0, 0, 0> }
+        }
+        object{ diff_barra_aluminio_menor translate <0, -5, 5> rotate <0,0,90>}
+      }
+      object{ diff_barra_aluminio_menor translate <-5, 0, 5> rotate <0,0,-90>}
+    }
+    object{ diff_barra_aluminio_menor translate <-5, -5, 5> rotate <0,0,180>}
+  }
+}
 
-// object{ roda_suporte translate <0, 0, 0> }
-// object{ roda_suporte translate <-200, 0, 0>  scale<-1,1,1>}
-// object{ roda_suporte translate <0, 0, 100> }
-// object{ roda_suporte translate <-200, 0, 100>  scale<-1,1,1>}
+#declare diff_barra_aluminio_maior = union{
+  box {<2, 4, -6>, <3, 6, 220> }
+  box {<1.4, 3.8, -6>, <3.6, 4.2, 220>}
+}
+
+#declare barra_aluminio_maior = union {
+  difference{
+    difference{
+      difference{
+        difference{
+          difference {
+            box {<0, 0, 0>, <5, 5, 212> texture{Chrome_Metal}}
+            box {<1.5, 1.5, -6>, <3.5, 3.5, 215> }
+          }
+          object{ diff_barra_aluminio_maior translate <0, 0, 0> }
+        }
+        object{ diff_barra_aluminio_maior translate <0, -5, 5> rotate <0,0,90>}
+      }
+      object{ diff_barra_aluminio_maior translate <-5, 0, 5> rotate <0,0,-90>}
+    }
+    object{ diff_barra_aluminio_maior translate <-5, -5, 5> rotate <0,0,180>}
+  }
+}
+
+#declare suporte_barra_direcao = union {
+  cylinder {<0, 0, 0>, <0, 33, 0>, 1 texture { Gold_Metal}}
+  cylinder {<0, 2, 0>, <0, 10, 0>, 1.5 texture { Gold_Metal}}
+  cylinder {<0, 22, 0>, <0, 30, 0>, 1.5 texture { Gold_Metal}}
+  sphere {<0, 0, 0>, 2 texture { Gold_Metal}}
+  sphere {<0, 33, 0>, 2 texture { Gold_Metal}}
+}
+
+#declare tampa_azul = union {
+  difference {
+    box { <0, 0, 0>, <19, 1, 140> pigment{Blue}}
+    union {
+      cylinder {<5, -1, 61>, <5, 2, 61>, 1.4 }
+      cylinder {<14, -1, 61>, <14, 2, 61>, 1.4 }
+      cylinder {<5, -1, 74>, <5, 2, 74>, 1.4 }
+      cylinder {<14, -1, 74>, <14, 2, 74>, 1.4 }
+      
+    }
+  }
+  object{ parafuso_pneu translate <5, 61, -2> rotate <90, 0, 0> }
+  object{ parafuso_pneu translate <14, 61, -2> rotate <90, 0, 0> }
+  object{ parafuso_pneu translate <5, 74, -2> rotate <90, 0, 0> }
+  object{ parafuso_pneu translate <14, 74, -2> rotate <90, 0, 0> }
+}
+
+#declare barra_com_apoio_completo = union {
+  object{ barra_aluminio_menor translate <8, 94, 0> }
+  object{ barra_aluminio_menor translate <-6, 94, 0> }
+  object{ motor_dupla translate <0, 0, -7> }
+  object{ suporte_barra_direcao translate <-1.5, 63, -9.4>}
+  object{ tampa_azul translate <-6, 99, -5>}
+}
+
+#declare barra_ferro_direcao = union {
+  box { <0, 0, 0>, <200, 5, 5> }
+}
+
+object{ barra_ferro_direcao translate <0, 94, -12>}
+object{ barra_aluminio_maior translate <-135, 94, -6> rotate <0,90,0>}
+object{ barra_aluminio_maior translate <0, 94, -6> rotate <0,90,0>}
+object{ barra_com_apoio_completo translate <0, 0, 0> }
+object{ barra_com_apoio_completo translate <-200, 0, 0> scale<-1,1,1> }
+
+
