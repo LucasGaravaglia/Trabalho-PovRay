@@ -2,25 +2,50 @@
 #include "textures.inc"
 #include "shapes.inc"
 #include "metals.inc"
-// //Camera lado cima
+light_source{ <50, 300, 100> White }
+light_source{ <50, 10, 100> White }
+
+
+// Camera1
+// light_source{ <0, 200, -130> White }
+// camera{
+//     location <-10, 200, -110>
+//     look_at  <80, 100, 10>
+// }
+
+
+// Camera2
+// light_source{ <-20, 200, 220> White }
+// camera{
+//     location <-30, 200, 200>
+//     look_at <80, 50, 50>
+// }
+
+// Camera3
+// light_source{ <-100, 220, 50> White }
+// camera{
+//     location <-90, 200, 80>
+//     look_at <5, 120, 70>
+// }
+
+// Camera4
+  // camera{
+  //     location <-90, 20, 50>
+  //     look_at <5, 50, 50>
+  // }
+
+// camera{
+//     location <100, 300, 70>
+//     look_at <100, 0, 70>
+// }
+
+// Camera5
 camera{
-    location <-60, 140, -60>
-    look_at <0, 100, 0>
+    location <-70, 10, -70>
+    look_at <100, 50, 70>
 }
 
-// camera{
-//     location <0, 90, -40>
-//     look_at <0, 90, 0>
-// }
 
-// camera{
-//     location <200, 170, 0>
-//     look_at <200, 100, 0>
-// }
-
-
-light_source{ <-150, 300, 150> White }
-// light_source{ <-100, 100, -100> White }
 plane{ y, -50
     pigment{ White }
 }
@@ -42,9 +67,9 @@ plane{<0,1,0>,1 hollow
 }// end of plane
 
 
-box { <0, 0, 0>,  <1000, 1, 1> pigment{Red} }// X
+// box { <0, 0, 0>,  <1000, 1, 1> pigment{Red} }// X
 // box { <0, 0, 0>,  <1, 1000, 1> pigment{Green}  }// Y
-box { <0, 0, 0>,  <1, 1, 1000> pigment{Blue}}// Z
+// box { <0, 0, 0>,  <1, 1, 1000> pigment{Blue}}// Z
 
 #declare Green_Metal = texture {pigment{color rgb <0, 1, 0>} finish { ambient 0.35 brilliance 2 diffuse 0.3 metallic specular 0.80 roughness 1/20 reflection 0.1}}
 
@@ -132,9 +157,18 @@ box { <0, 0, 0>,  <1, 1, 1000> pigment{Blue}}// Z
   cylinder {<0, 0, -1>, <0, 0, 3>, 0.5 texture {pigment {Gray}}}
 }
 
+#declare eixo_roda_suporte = union {
+  cylinder { <0, 0, 0>, <0, 3, 0>, 3 texture{Chrome_Metal}}
+  cylinder { <0, -2, 0>, <0, 0, 0>, 1 texture{Silver_Metal}}
+  box {<-4, -5, -1>, <5, -2, 1> }
+}
+
+//DESCOMENTAR AQUI
 #declare roda_suporte = union {
-  object{ suporte translate <-3, 10, -25> rotate <0, -90, 0> }
-  object{ pneu translate <0, 0, 0> }
+  object{ suporte translate <-3, 7, -25> rotate <0, -90, 0> }
+  object{ pneu translate <0, -3, 0> }
+  object{ eixo_roda_suporte translate <5, 57, 0> }
+  
   cylinder {<9, 16, 0>, <26, 16, 0>, 2 texture {Metal}}
   object{ parafuso_pneu translate <20.3, 15, -4> }
   object{ parafuso_pneu translate <23.5, 15, -4> }
@@ -303,10 +337,68 @@ box { <0, 0, 0>,  <1, 1, 1000> pigment{Blue}}// Z
 #declare barra_ferro_direcao = union {
   box { <0, 0, 0>, <200, 5, 5> }
 }
+// light_source{ <20, 130, 10> White }
+// light_source{ <100, 130, -100> White }
+
+
+// camera{
+//   location <100, 130, 0>
+//   look_at <100, 100, 0>
+// }
+
+#declare suporte_tampa = union {
+  difference{
+    difference{
+      box { <25, 16, 25>, <35, 20, 25.5> texture {Gold_Metal}}
+      cylinder { <27, 18, 25>, <27, 18, 26.5>, 0.5 texture {Brass_Metal}}
+    }
+    cylinder { <32.5, 18, 25>, <32.5, 18, 26.5>, 0.5 texture {Brass_Metal}}
+  }
+  difference{
+    difference{
+      box { <25, 22, 25>, <35, 26, 25.5> texture {Gold_Metal}}
+      cylinder { <27, 24, 25>, <27, 24, 26.5>, 0.5 texture {Brass_Metal}}
+    }
+    cylinder { <32.5, 24, 25>, <32.5, 24, 26.5>, 0.5 texture {Brass_Metal}}
+  }
+  union {
+    difference{
+      difference {
+        cylinder { <25, 21, 25>, <35, 21, 25>, 1 texture {Gold_Metal}}
+        cylinder { <27, 21, 25>, <29, 21, 25>, 1.1 texture {Bronze_Metal}}
+      }
+      cylinder { <31, 21, 25>, <33, 21, 25>, 1.1 texture {Bronze_Metal}}
+    }
+    cylinder { <27, 21, 25>, <29, 21, 25>, 1 texture {Bronze_Metal}}
+    cylinder { <31, 21, 25>, <33, 21, 25>, 1 texture {Bronze_Metal}}
+  }
+}
+
+#declare caixa_papelao = union {
+  difference {
+    box { <13, 0, 0>, <187, 20, 25> texture {pigment{Blue}}}
+    box { <14, 1, 1>, <186, 32, 24> texture {DMFWood4}}
+  }
+  difference {
+    box { <13, 22, 23>, <187, 46, 25> texture {pigment{Blue}}}
+    box { <12, 21, 22>, <189, 47, 24> texture {DMFWood4}}
+  }
+  object{ suporte_tampa translate <0, 0, 0>}
+  object{ suporte_tampa translate <140, 0, 0>}
+  
+}
+
+object{ caixa_papelao translate <0, 80, 7>}
+object{ caixa_papelao translate <0, 80, 95>}
 
 object{ barra_ferro_direcao translate <0, 94, -12>}
 object{ barra_aluminio_maior translate <-135, 94, -6> rotate <0,90,0>}
-object{ barra_aluminio_maior translate <0, 94, -6> rotate <0,90,0>}
+union{
+  object{ barra_aluminio_maior translate <0, 94, -6> rotate <0,90,0>}
+  cylinder { <100, 94, -6>, <100, 94, 1.5>, 1.8 texture {Chrome_Metal}}
+  cylinder { <100, 94, -8>, <100, 94, 0>, 1 texture {Chrome_Metal}}
+}
+
 object{ barra_com_apoio_completo translate <0, 0, 0> }
 object{ barra_com_apoio_completo translate <-200, 0, 0> scale<-1,1,1> }
 
