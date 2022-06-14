@@ -40,10 +40,10 @@ light_source{ <50, 10, 100> White }
 // }
 
 // Camera5
-camera{
-    location <-70, 10, -70>
-    look_at <100, 50, 70>
-}
+// camera{
+//     location <-70, 10, -70>
+//     look_at <100, 50, 70>
+// }
 
 
 plane{ y, -50
@@ -337,14 +337,6 @@ plane{<0,1,0>,1 hollow
 #declare barra_ferro_direcao = union {
   box { <0, 0, 0>, <200, 5, 5> }
 }
-// light_source{ <20, 130, 10> White }
-// light_source{ <100, 130, -100> White }
-
-
-// camera{
-//   location <100, 130, 0>
-//   look_at <100, 100, 0>
-// }
 
 #declare suporte_tampa = union {
   difference{
@@ -388,18 +380,37 @@ plane{<0,1,0>,1 hollow
   
 }
 
-object{ caixa_papelao translate <0, 80, 7>}
-object{ caixa_papelao translate <0, 80, 95>}
+// object{ caixa_papelao translate <0, 80, 7>}
+// object{ caixa_papelao translate <0, 80, 95>}
 
-object{ barra_ferro_direcao translate <0, 94, -12>}
-object{ barra_aluminio_maior translate <-135, 94, -6> rotate <0,90,0>}
-union{
-  object{ barra_aluminio_maior translate <0, 94, -6> rotate <0,90,0>}
-  cylinder { <100, 94, -6>, <100, 94, 1.5>, 1.8 texture {Chrome_Metal}}
-  cylinder { <100, 94, -8>, <100, 94, 0>, 1 texture {Chrome_Metal}}
+// object{ barra_ferro_direcao translate <0, 94, -12>}
+// object{ barra_aluminio_maior translate <-135, 94, -6> rotate <0,90,0>}
+// union{
+//   object{ barra_aluminio_maior translate <0, 94, -6> rotate <0,90,0>}
+//   cylinder { <100, 94, -6>, <100, 94, 1.5>, 1.8 texture {Chrome_Metal}}
+//   cylinder { <100, 94, -8>, <100, 94, 0>, 1 texture {Chrome_Metal}}
+// }
+
+// object{ barra_com_apoio_completo translate <0, 0, 0> }
+// object{ barra_com_apoio_completo translate <-200, 0, 0> scale<-1,1,1> }
+
+camera{
+    location <-40, 70, -40>
+    look_at  <0, 20, 0>
 }
 
-object{ barra_com_apoio_completo translate <0, 0, 0> }
-object{ barra_com_apoio_completo translate <-200, 0, 0> scale<-1,1,1> }
+union {
+  difference {
+    box {<0, 0, 0>, <10, 5, 30> pigment{Gray}}
+    box {<1, 1, -10>, <9, 4, 40> texture{Metal}}
+  }
+  difference {
+    box {<0, 0, 35>,<10, 5, 90> pigment{Gray} }
+    box {<1, 1, 20>,<9, 4, 100> texture{Metal} }
+    rotate <-30, 0, 0> translate <0, -17, 0>
+  }
+}
 
-
+//     7
+//  3     6
+// 1 2   4 5
